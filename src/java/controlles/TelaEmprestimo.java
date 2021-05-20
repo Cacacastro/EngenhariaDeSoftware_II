@@ -1,11 +1,16 @@
-package servlets;
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package controlles;
 
-import bd.dal.ControleDAL;
-import bd.dal.UsuarioDAL;
-import bd.entidades.Controle_Devolucao;
-import bd.entidades.Usuario;
+import bd.dal.EmprestimoDAL;
+import bd.entidades.Emprestimo;
+import bd.util.Conexao;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Date;
 import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -13,29 +18,20 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet(name = "TelaControle", urlPatterns = {"/TelaControle"})
-public class TelaControle extends HttpServlet {
-
-    public String buscaControle(String filtro) {
+/**
+ *
+ * @author Carlos
+ */
+@WebServlet(name = "TelaEmprestimo", urlPatterns = {"/TelaEmprestimo"})
+public class TelaEmprestimo extends HttpServlet {
+public String buscaEmprestimo(String filtro, Conexao con) {
         String res = "";
-        ArrayList<Controle_Devolucao> controles = new ControleDAL().getControles(filtro,true);
-        for (Controle_Devolucao u : controles) {
-          String dev;
-          if(u.getDevolucao())
-              dev = "Devolvido";
-          else
-              dev = "Pendente";
-          
-          String multa;
-          if(u.getMulta())
-              multa = "<img src='icones/correto.png'/>";
-          else
-              multa = "<img src='icones/incorreto.png'/>";
+        ArrayList<Emprestimo> emprestimos = new EmprestimoDAL().getEmprestimos(filtro,true,con);
+        for (Emprestimo u : emprestimos) {
           res += String.format("<tr><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td>"
-              + "<td onclick='ApagaAlteraControle(\"apagar\",%s)'><img src='icones/apagar.png'/></td>"
-              + "<td onclick='ApagaAlteraControle(\"alterar\",%s)'><img src='icones/alterar.png'/></a></td>"
-              + "</tr>", "" + u.getCod(), ""+multa,""+u.getValorMulta(),
-                        "" + u.getEmp_cod(), ""+dev, ""+u.getCod(), ""+u.getCod());
+              + "<td onclick='ApagaAlteraEmprestimo(\"apagar\",%s)'><img src='icones/apagar.png'/></td>"
+              + "<td onclick='ApagaAlteraEmprestimo(\"alterar\",%s)'><img src='icones/alterar.png'/></a></td>"
+              + "</tr>", "" + u.getCod(),"" + u.getUser_cod(), ""+u.getData(),""+u.getDuracao(), ""+ u.getValorTotal(), ""+u.getCod(),""+u.getCod());
         }
         
         return res;
@@ -47,43 +43,47 @@ public class TelaControle extends HttpServlet {
             response.setContentType("text/html;charset=UTF-8");
             String erro = "";
             String acao = request.getParameter("acao");
-            int cod;
+            int Ecod;
             try {
-                cod = Integer.parseInt(request.getParameter("cod"));
+                Ecod = Integer.parseInt(request.getParameter("cod"));
             } catch (Exception e) {
-                cod = 0;
+                Ecod = 0;
             }
-            ControleDAL ctr = new ControleDAL();
+            EmprestimoDAL ctr = new EmprestimoDAL();
+            Conexao con=new Conexao();
             switch (acao.toLowerCase()) 
             {
                 case "consultar":
                     String filtro = request.getParameter("filtro");
-                    if (!filtro.isEmpty()) filtro = "cdd_cod = " + filtro.toLowerCase();
-                    response.getWriter().print(buscaControle(filtro));
+                    if (!filtro.isEmpty()) filtro = "emp_data like '%" + filtro + "%'";
+                    response.getWriter().print(buscaEmprestimo(filtro,con));
                     break;
                 case "apagar":
-                    if (!ctr.apagar(cod))
-                       erro = "Erro ao apagar o controle";
+                    if (!ctr.apagar(Ecod,con))
+                       erro = "Erro ao apagar o empréstimo";
                     response.getWriter().print(erro);
                     break;
                 case "alterar":
-                    Controle_Devolucao u = ctr.getControle(cod);
+                    Emprestimo u = ctr.getEmprestimo(Ecod,con);
                     response.getWriter().print(u); // retorna todos os dados na forma de lista (,,,)
                     break;
                 case "confirmar": //novo e alteração
                     erro="ok";
-                    boolean multa = Boolean.getBoolean(request.getParameter("multa"));
-                    Double valor_multa = Double.parseDouble(request.getParameter("valor_multa"));
-                    int emp_cod = Integer.parseInt(request.getParameter("emp_cod"));
-                    boolean dev = Boolean.getBoolean(request.getParameter("dev"));
-                    Controle_Devolucao user = new Controle_Devolucao(cod,emp_cod, dev, multa, valor_multa);
-                    if (cod == 0) 
-                    {   if (!ctr.salvar(user)) erro = "Erro ao gravar o controle";}
+                    Date data = Date.valueOf(request.getParameter("emp_data"));
+                    int duracao = Integer.parseInt(request.getParameter("emp_duracao"));
+                    double ValorTotal = Double.parseDouble(request.getParameter("emp_valortotal"));
+                    int usu = Integer.parseInt(request.getParameter("usu_cod"));
+                    //VALIDAR AQUI SE EXISTE USER E BIB
+                    Emprestimo user = new Emprestimo(Ecod,duracao,usu, data, ValorTotal);
+                    response.getWriter().print(user);
+                    if (Ecod == 0) 
+                    {   if (!ctr.salvar(user,con)) erro = "Erro ao gravar o empréstimo";}
                     else 
-                    {   if (!ctr.alterar(user)) erro = "Erro ao alterar o controle";}
-                    response.getWriter().print(erro);
+                    {   if (!ctr.alterar(user,con)) erro = "Erro ao alterar o empréstimo";}
+                    
                     break;
             }
+            con.fecharConexao();
 
     }
 

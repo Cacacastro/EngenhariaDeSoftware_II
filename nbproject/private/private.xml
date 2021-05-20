@@ -2,6 +2,23 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/C:/Users/Carlos/Desktop/5º-Termo/Engenharia%20de%20Software%20II/2ºBim/TrabEngII/src/java/bd/dal/EditoraDAL.java</file>
+            <file>file:/C:/Users/Carlos/Desktop/5º-Termo/Engenharia%20de%20Software%20II/2ºBim/TrabEngII/src/java/bd/dal/LivroDAL.java</file>
+            <file>file:/C:/Users/Carlos/Desktop/5º-Termo/Engenharia%20de%20Software%20II/2ºBim/TrabEngII/src/java/bd/dal/EmprestimoDAL.java</file>
+            <file>file:/C:/Users/Carlos/Desktop/5º-Termo/Engenharia%20de%20Software%20II/2ºBim/TrabEngII/src/java/bd/entidades/Livro.java</file>
+            <file>file:/C:/Users/Carlos/Desktop/5º-Termo/Engenharia%20de%20Software%20II/2ºBim/TrabEngII/src/java/bd/entidades/Usuario.java</file>
+            <file>file:/C:/Users/Carlos/Desktop/5º-Termo/Engenharia%20de%20Software%20II/2ºBim/TrabEngII/src/java/bd/entidades/Exemplar.java</file>
+            <file>file:/C:/Users/Carlos/Desktop/5º-Termo/Engenharia%20de%20Software%20II/2ºBim/TrabEngII/src/java/bd/entidades/Emprestimo.java</file>
+            <file>file:/C:/Users/Carlos/Desktop/5º-Termo/Engenharia%20de%20Software%20II/2ºBim/TrabEngII/src/java/bd/dal/AutorDAL.java</file>
+            <file>file:/C:/Users/Carlos/Desktop/5º-Termo/Engenharia%20de%20Software%20II/2ºBim/TrabEngII/src/java/controlles/TelaLivro.java</file>
+            <file>file:/C:/Users/Carlos/Desktop/5º-Termo/Engenharia%20de%20Software%20II/2ºBim/TrabEngII/src/java/controlles/TelaLivroUser.java</file>
+            <file>file:/C:/Users/Carlos/Desktop/5º-Termo/Engenharia%20de%20Software%20II/2ºBim/TrabEngII/src/java/controlles/TelaEmprestimo.java</file>
+            <file>file:/C:/Users/Carlos/Desktop/5º-Termo/Engenharia%20de%20Software%20II/2ºBim/TrabEngII/src/java/bd/dal/UsuarioDAL.java</file>
+            <file>file:/C:/Users/Carlos/Desktop/5º-Termo/Engenharia%20de%20Software%20II/2ºBim/TrabEngII/src/java/bd/entidades/Autor.java</file>
+            <file>file:/C:/Users/Carlos/Desktop/5º-Termo/Engenharia%20de%20Software%20II/2ºBim/TrabEngII/src/java/bd/dal/GeneroDAL.java</file>
+            <file>file:/C:/Users/Carlos/Desktop/5º-Termo/Engenharia%20de%20Software%20II/2ºBim/TrabEngII/src/java/bd/entidades/Reserva.java</file>
+            <file>file:/C:/Users/Carlos/Desktop/5º-Termo/Engenharia%20de%20Software%20II/2ºBim/TrabEngII/src/java/bd/entidades/Editora.java</file>
+        </group>
     </open-files>
 </project-private>

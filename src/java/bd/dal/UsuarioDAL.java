@@ -10,39 +10,33 @@ public class UsuarioDAL {
     public UsuarioDAL() {
     }
     
-    public boolean salvar (Usuario u)
+    public boolean salvar (Usuario u, Conexao con)
     {
         //erro ao inserir sem o cod
-        ArrayList <Usuario> usuarios = getUsers("",true);
+        ArrayList <Usuario> usuarios = getUsers("",true,con);
         int i = usuarios.get(usuarios.size()-1).getCod()+1;
         String sql="insert into usuario (user_cod,user_nome,user_fone,user_end,user_email,user_senha, user_admin) values ('"+i+"', '"
                 +u.getNome()+"', '"+u.getFone()+"', '"+u.getEnd()+"', '"+u.getEmail()+"', '"+u.getSenha()+"', '"+u.getAdmin()+"')";
         
-        Conexao con=new Conexao();
         boolean flag=con.manipular(sql);
-        con.fecharConexao();
         return flag;                              
     }
-    public boolean alterar (Usuario u)
+    public boolean alterar (Usuario u, Conexao con)
     {   
         String sql = "update usuario set user_nome='"+u.getNome()+"', user_fone='"+u.getFone()+"', user_end='"+u.getEnd()+"', user_email='"
                 +u.getEmail()+"', user_senha='"+u.getSenha()+"' where user_cod="+u.getCod();
-        Conexao con=new Conexao();
+        
         boolean flag=con.manipular(sql);
-        con.fecharConexao();
         return flag;                       
     }
-    public boolean apagar(int cod)
+    public boolean apagar(int cod, Conexao con)
     {
-        Conexao con=new Conexao();
         boolean flag=con.manipular("delete from usuario where user_cod="+cod);
-        con.fecharConexao();
         return flag;                      
     }
-    public Usuario getUser(int cod)
+    public Usuario getUser(int cod, Conexao con)
     {   Usuario u=new Usuario();
         String sql="select * from usuario where user_cod="+cod;
-        Conexao con=new Conexao();
         ResultSet rs = con.consultar(sql);
         try
         {
@@ -59,10 +53,9 @@ public class UsuarioDAL {
 
         }
         catch(Exception e){System.out.println(e);}
-        con.fecharConexao();
         return u;
     }
-    public ArrayList <Usuario> getUsers(String filtro,boolean flag)
+    public ArrayList <Usuario> getUsers(String filtro,boolean flag, Conexao con)
     {   ArrayList <Usuario> lista=new ArrayList();
         String sql="select * from usuario";
         if (!filtro.isEmpty())
@@ -71,7 +64,6 @@ public class UsuarioDAL {
             sql+=" order by user_nome";
         else
             sql+=" order by user_cod";
-        Conexao con=new Conexao();
         ResultSet rs = con.consultar(sql);
         try
         {
@@ -79,7 +71,6 @@ public class UsuarioDAL {
              lista.add(new Usuario(rs.getInt("user_cod"),rs.getString("user_nome"),rs.getString("user_fone"),rs.getString("user_end"),rs.getString("user_email"),rs.getString("user_senha"),rs.getBoolean("user_admin")));
         }
         catch(Exception e){System.out.println(e);}
-        con.fecharConexao();
         return lista;
     }
     

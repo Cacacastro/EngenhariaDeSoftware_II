@@ -10,39 +10,36 @@ public class EmprestimoDAL {
     public EmprestimoDAL() {
     }
     
-    public boolean salvar (Emprestimo u)
+    public boolean salvar (Emprestimo u, Conexao con)
     {
         //erro ao inserir sem o cod
-        ArrayList <Emprestimo> emp = getEmprestimos("",true);
+        ArrayList <Emprestimo> emp = getEmprestimos("",true, con);
         int i = emp.get(emp.size()-1).getCod()+1;
         String sql="insert into emprestimo (emp_cod,emp_duracao,emp_valortotal,user_cod,emp_data) values ('"+i+"', '"
                 +u.getDuracao()+"', '"+u.getValorTotal()+"', '"+u.getUser_cod()+"', '"+u.getData()+"')";
         
-        Conexao con=new Conexao();
         boolean flag=con.manipular(sql);
-        con.fecharConexao();
         return flag;                              
     }
-    public boolean alterar (Emprestimo u)
+    
+    public boolean alterar (Emprestimo u, Conexao con)
     {   
         String sql = "update emprestimo set emp_duracao='"+u.getDuracao()+"', emp_valortotal='"+u.getValorTotal()+"', user_cod='"+u.getUser_cod()+
                 "', emp_data='"+u.getData()+"' where emp_cod="+u.getCod();
-        Conexao con=new Conexao();
+
         boolean flag=con.manipular(sql);
-        con.fecharConexao();
         return flag;                       
     }
-    public boolean apagar(int cod)
+    
+    public boolean apagar(int cod, Conexao con)
     {
-        Conexao con=new Conexao();
         boolean flag=con.manipular("delete from emprestimo where emp_cod="+cod);
-        con.fecharConexao();
         return flag;                      
     }
-    public Emprestimo getEmprestimo(int cod)
+    
+    public Emprestimo getEmprestimo(int cod, Conexao con)
     {   Emprestimo u=new Emprestimo();
         String sql="select * from emprestimo where emp_cod="+cod;
-        Conexao con=new Conexao();
         ResultSet rs = con.consultar(sql);
         try
         {
@@ -57,10 +54,9 @@ public class EmprestimoDAL {
 
         }
         catch(Exception e){System.out.println(e);}
-        con.fecharConexao();
         return u;
     }
-    public ArrayList <Emprestimo> getEmprestimos(String filtro,boolean flag)
+    public ArrayList <Emprestimo> getEmprestimos(String filtro,boolean flag, Conexao con)
     {   ArrayList <Emprestimo> lista=new ArrayList();
         String sql="select * from emprestimo";
         if (!filtro.isEmpty())
@@ -69,7 +65,6 @@ public class EmprestimoDAL {
             sql+=" order by emp_data";
         else
             sql+=" order by emp_cod";
-        Conexao con=new Conexao();
         ResultSet rs = con.consultar(sql);
         try
         {
@@ -77,7 +72,6 @@ public class EmprestimoDAL {
              lista.add(new Emprestimo(rs.getInt("emp_cod"),rs.getInt("emp_duracao"),rs.getInt("user_cod"),rs.getDate("emp_data"),rs.getDouble("emp_valorTotal")));
         }
         catch(Exception e){System.out.println(e);}
-        con.fecharConexao();
         return lista;
     }
     

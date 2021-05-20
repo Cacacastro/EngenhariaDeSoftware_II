@@ -1,7 +1,17 @@
-package servlets;
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package controlles;
 
-import bd.dal.UsuarioDAL;
-import bd.entidades.Usuario;
+import bd.dal.EditoraDAL;
+import bd.dal.GeneroDAL;
+import bd.dal.LivroDAL;
+import bd.entidades.Editora;
+import bd.entidades.Genero;
+import bd.entidades.Livro;
+import bd.util.Conexao;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -11,18 +21,22 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet(name = "TelaUsuario", urlPatterns = {"/TelaUsuario"})
-public class TelaUsuario extends HttpServlet {
+/**
+ *
+ * @author Carlos
+ */
+@WebServlet(name = "TelaLivro", urlPatterns = {"/TelaLivro"})
+public class TelaLivro extends HttpServlet {
 
-     public String buscaUsuario(String filtro) {
+    public String buscaLivro(String filtro, Conexao con) {
         String res = "";
-        ArrayList<Usuario> usuarios = new UsuarioDAL().getUsers(filtro,true);
-        for (Usuario u : usuarios) {
-          res += String.format("<tr><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td>"
-              + "<td onclick='ApagaAlteraUser(\"apagar\",%s)'><img src='icones/apagar.png'/></td>"
-              + "<td onclick='ApagaAlteraUser(\"alterar\",%s)'><img src='icones/alterar.png'/></a></td>"
-              + "</tr>", "" + u.getCod(), u.getNome(),u.getFone(), u.getEnd(),
-                        "" + u.getEmail(),"" + u.getAdmin(), ""+u.getCod(), ""+u.getCod());
+        ArrayList<Livro> Livros = new LivroDAL().getLivros(filtro,true,con);
+        for (Livro l : Livros) {
+          res += String.format("<tr><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td>"
+              + "<td onclick='ApagaAlteraLivro(\"apagar\",%s)'><img src='icones/apagar.png'/></td>"
+              + "<td onclick='ApagaAlteraLivro(\"alterar\",%s)'><img src='icones/alterar.png'/></a></td>"
+              + "</tr>", "" + l.getCod(), l.getTitulo(),""+l.getNumPag(), ""+l.getGen_cod().getGen_genero(),
+                        ""+l.getEdi_cod().getEdi_nome(), ""+l.getCod(), ""+l.getCod());
         }
         
         return res;
@@ -40,40 +54,44 @@ public class TelaUsuario extends HttpServlet {
             } catch (Exception e) {
                 cod = 0;
             }
-            UsuarioDAL ctr = new UsuarioDAL();
+            LivroDAL ctr = new LivroDAL();
+            Conexao con=new Conexao();
             switch (acao.toLowerCase()) 
             {
                 case "consultar":
                     String filtro = request.getParameter("filtro");
-                    if (!filtro.isEmpty()) filtro = "upper(user_nome) like '%" + filtro.toUpperCase() + "%'";
-                    response.getWriter().print(buscaUsuario(filtro));
+                    if (!filtro.isEmpty()) filtro = "upper(liv_titulo) like '%" + filtro.toUpperCase() + "%'";
+                    response.getWriter().print(buscaLivro(filtro,con));
                     break;
                 case "apagar":
-                    if (!ctr.apagar(cod))
-                       erro = "Erro ao apagar o usuário";
+                    if (!ctr.apagar(cod,con))
+                       erro = "Erro ao apagar o livro";
                     response.getWriter().print(erro);
                     break;
                 case "alterar":
-                    Usuario u = ctr.getUser(cod);
+                    Livro u = ctr.getUser(cod,con);
                     response.getWriter().print(u); // retorna todos os dados na forma de lista (,,,)
                     break;
                 case "confirmar": //novo e alteração
                     erro="ok";
                     String nome = request.getParameter("nome");
-                    String fone = request.getParameter("fone");
-                    String end = request.getParameter("end");
-                    String email = request.getParameter("email");
-                    String senha = request.getParameter("senha");
-                    String admin = request.getParameter("admin");
-                    Usuario user = new Usuario(cod, nome, fone, end, email, senha, Boolean.getBoolean(admin));
-                    //response.getWriter().print(user.toString());
+                    int paginas = Integer.parseInt(request.getParameter("paginas"));
+                    int gen = Integer.parseInt(request.getParameter("gen"));
+                    int editora = Integer.parseInt(request.getParameter("editora"));
+                    //Verifica autores, genero e editora
+                    EditoraDAL edal = new EditoraDAL();
+                    Editora ed = edal.getEditora(editora, con);
+                    GeneroDAL gdal = new GeneroDAL();
+                    Genero g = gdal.getGenero(cod, con);
+                    Livro liv = new Livro(cod, paginas,g,ed,nome);
                     if (cod == 0) 
-                    {   if (!ctr.salvar(user)) erro = "Erro ao gravar o usuário";}
+                    {   if (!ctr.salvar(liv,con)) erro = "Erro ao gravar o livro";}
                     else 
-                    {   if (!ctr.alterar(user)) erro = "Erro ao alterar o usuário";}
+                    {   if (!ctr.alterar(liv,con)) erro = "Erro ao alterar o livro";}
                     response.getWriter().print(erro);
                     break;
             }
+            con.fecharConexao();
 
     }
 

@@ -1,14 +1,16 @@
 package bd.entidades;
 
 public class Livro {
-    private int cod, numPag, gen_cod,edi_cod;
+    private int cod, numPag;
+    private Editora edi_cod;
+    private Genero gen_cod;
     private String titulo;
 
     public Livro() {
-        this("",0,0,0);
+        this("",0,new Genero(),new Editora());
     }
 
-    public Livro( String titulo, int numPag, int gen_cod,int edi_cod) {
+    public Livro( String titulo, int numPag, Genero gen_cod,Editora edi_cod) {
         this.cod = 0;
         this.numPag = numPag;
         this.gen_cod = gen_cod;
@@ -16,7 +18,7 @@ public class Livro {
         this.titulo = titulo;
     }
 
-    public Livro(int cod, int numPag, int gen_cod, int edi_cod, String titulo) {
+    public Livro(int cod, int numPag, Genero gen_cod, Editora edi_cod, String titulo) {
         this.cod = cod;
         this.numPag = numPag;
         this.gen_cod = gen_cod;
@@ -45,19 +47,19 @@ public class Livro {
             this.numPag = 0;
     }
 
-    public int getGen_cod() {
+    public Genero getGen_cod() {
         return gen_cod;
     }
 
-    public void setGen_cod(int gen_cod) {
+    public void setGen_cod(Genero gen_cod) {
         this.gen_cod = gen_cod;
     }
     
-    public int getEdi_cod() {
+    public Editora getEdi_cod() {
         return edi_cod;
     }
 
-    public void setEdi_cod(int edi_cod) {
+    public void setEdi_cod(Editora edi_cod) {
         this.edi_cod = edi_cod;
     }
 

@@ -1,15 +1,10 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package servlets;
+package controlles;
 
-import bd.dal.EmprestimoDAL;
-import bd.entidades.Emprestimo;
+import bd.dal.UsuarioDAL;
+import bd.entidades.Usuario;
+import bd.util.Conexao;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.Date;
 import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -17,20 +12,18 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/**
- *
- * @author Carlos
- */
-@WebServlet(name = "TelaEmprestimo", urlPatterns = {"/TelaEmprestimo"})
-public class TelaEmprestimo extends HttpServlet {
-public String buscaEmprestimo(String filtro) {
+@WebServlet(name = "TelaUsuario", urlPatterns = {"/TelaUsuario"})
+public class TelaUsuario extends HttpServlet {
+
+     public String buscaUsuario(String filtro, Conexao con) {
         String res = "";
-        ArrayList<Emprestimo> emprestimos = new EmprestimoDAL().getEmprestimos(filtro,true);
-        for (Emprestimo u : emprestimos) {
-          res += String.format("<tr><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td>"
-              + "<td onclick='ApagaAlteraEmprestimo(\"apagar\",%s)'><img src='icones/apagar.png'/></td>"
-              + "<td onclick='ApagaAlteraEmprestimo(\"alterar\",%s)'><img src='icones/alterar.png'/></a></td>"
-              + "</tr>", "" + u.getCod(),"" + u.getUser_cod(), ""+u.getData(),""+u.getDuracao(), ""+ u.getValorTotal(), ""+u.getCod(),""+u.getCod());
+        ArrayList<Usuario> usuarios = new UsuarioDAL().getUsers(filtro,true,con);
+        for (Usuario u : usuarios) {
+          res += String.format("<tr><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td>"
+              + "<td onclick='ApagaAlteraUser(\"apagar\",%s)'><img src='icones/apagar.png'/></td>"
+              + "<td onclick='ApagaAlteraUser(\"alterar\",%s)'><img src='icones/alterar.png'/></a></td>"
+              + "</tr>", "" + u.getCod(), u.getNome(),u.getFone(), u.getEnd(),
+                        "" + u.getEmail(),"" + u.getAdmin(), ""+u.getCod(), ""+u.getCod());
         }
         
         return res;
@@ -42,45 +35,48 @@ public String buscaEmprestimo(String filtro) {
             response.setContentType("text/html;charset=UTF-8");
             String erro = "";
             String acao = request.getParameter("acao");
-            int Ecod;
+            int cod;
             try {
-                Ecod = Integer.parseInt(request.getParameter("cod"));
+                cod = Integer.parseInt(request.getParameter("cod"));
             } catch (Exception e) {
-                Ecod = 0;
+                cod = 0;
             }
-            EmprestimoDAL ctr = new EmprestimoDAL();
+            UsuarioDAL ctr = new UsuarioDAL();
+            Conexao con=new Conexao();
             switch (acao.toLowerCase()) 
             {
                 case "consultar":
                     String filtro = request.getParameter("filtro");
-                    if (!filtro.isEmpty()) filtro = "emp_data like '%" + filtro + "%'";
-                    response.getWriter().print(buscaEmprestimo(filtro));
+                    if (!filtro.isEmpty()) filtro = "upper(user_nome) like '%" + filtro.toUpperCase() + "%'";
+                    response.getWriter().print(buscaUsuario(filtro,con));
                     break;
                 case "apagar":
-                    if (!ctr.apagar(Ecod))
-                       erro = "Erro ao apagar o empréstimo";
+                    if (!ctr.apagar(cod,con))
+                       erro = "Erro ao apagar o usuário";
                     response.getWriter().print(erro);
                     break;
                 case "alterar":
-                    Emprestimo u = ctr.getEmprestimo(Ecod);
+                    Usuario u = ctr.getUser(cod,con);
                     response.getWriter().print(u); // retorna todos os dados na forma de lista (,,,)
                     break;
                 case "confirmar": //novo e alteração
                     erro="ok";
-                    Date data = Date.valueOf(request.getParameter("emp_data"));
-                    int duracao = Integer.parseInt(request.getParameter("emp_duracao"));
-                    double ValorTotal = Double.parseDouble(request.getParameter("emp_valortotal"));
-                    int usu = Integer.parseInt(request.getParameter("usu_cod"));
-                    //VALIDAR AQUI SE EXISTE USER E BIB
-                    Emprestimo user = new Emprestimo(Ecod,duracao,usu, data, ValorTotal);
-                    response.getWriter().print(user);
-                    if (Ecod == 0) 
-                    {   if (!ctr.salvar(user)) erro = "Erro ao gravar o empréstimo";}
+                    String nome = request.getParameter("nome");
+                    String fone = request.getParameter("fone");
+                    String end = request.getParameter("end");
+                    String email = request.getParameter("email");
+                    String senha = request.getParameter("senha");
+                    String admin = request.getParameter("admin");
+                    Usuario user = new Usuario(cod, nome, fone, end, email, senha, Boolean.getBoolean(admin));
+                    //response.getWriter().print(user.toString());
+                    if (cod == 0) 
+                    {   if (!ctr.salvar(user,con)) erro = "Erro ao gravar o usuário";}
                     else 
-                    {   if (!ctr.alterar(user)) erro = "Erro ao alterar o empréstimo";}
-                    
+                    {   if (!ctr.alterar(user,con)) erro = "Erro ao alterar o usuário";}
+                    response.getWriter().print(erro);
                     break;
             }
+            con.fecharConexao();
 
     }
 
