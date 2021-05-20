@@ -5,6 +5,9 @@
  */
 package controlles;
 
+import bd.dal.UsuarioDAL;
+import bd.entidades.Usuario;
+import bd.util.Conexao;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -27,22 +30,25 @@ public class ValidaSessao extends HttpServlet {
         int logou=0;
         String login=request.getParameter("login");
         String senha=request.getParameter("senha");
-        if (login!=null && !login.isEmpty())
+        Conexao con=new Conexao();
+        if (!senha.isEmpty() && !login.isEmpty())
         {
-             if(login.equals("admin") && senha.equals("admin"))
-             {
-                 HttpSession sessao = request.getSession();
-                 sessao.setAttribute("admin", "admin");
-                 logou = 2;
-             }
-                 
-             if(login.equals("user") && senha.equals("user"))
-             {
-                 HttpSession sessao = request.getSession();
-                 sessao.setAttribute("user", "user");
-                 logou = 1;
-             }
+            UsuarioDAL dal = new UsuarioDAL();
+            Usuario user = dal.getUserByEmail(login, con);
+            if(user!=null)
+            {
+                if(senha.equals(user.getSenha()))
+                {
+                    HttpSession sessao = request.getSession();
+                    sessao.setAttribute(user.getNome(), user);
+                    if(user.getAdmin())
+                        logou =2;
+                    else
+                        logou =1;
+                }
+            }
         }
+        con.fecharConexao();
         if (logou == 2)
             response.sendRedirect("admin.html");
         else

@@ -55,6 +55,27 @@ public class UsuarioDAL {
         catch(Exception e){System.out.println(e);}
         return u;
     }
+    public Usuario getUserByEmail(String email, Conexao con)
+    {   Usuario u=new Usuario();
+        String sql="select * from usuario where user_email='"+email+"'";
+        ResultSet rs = con.consultar(sql);
+        try
+        {
+          if (rs.next())
+          {
+              u.setCod(rs.getInt("user_cod"));
+              u.setNome(rs.getString("user_nome"));
+              u.setFone(rs.getString("user_fone"));
+              u.setEnd(rs.getString("user_end"));
+              u.setEmail(rs.getString("user_email"));
+              u.setSenha(rs.getString("user_senha"));
+              u.setAdmin(rs.getBoolean("user_admin"));
+          }
+
+        }
+        catch(Exception e){System.out.println(e);}
+        return u;
+    }
     public ArrayList <Usuario> getUsers(String filtro,boolean flag, Conexao con)
     {   ArrayList <Usuario> lista=new ArrayList();
         String sql="select * from usuario";
