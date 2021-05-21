@@ -69,7 +69,7 @@ public class TelaLivro extends HttpServlet {
                     response.getWriter().print(erro);
                     break;
                 case "alterar":
-                    Livro u = ctr.getUser(cod,con);
+                    Livro u = ctr.getLivro(cod,con);
                     response.getWriter().print(u); // retorna todos os dados na forma de lista (,,,)
                     break;
                 case "confirmar": //novo e alteração

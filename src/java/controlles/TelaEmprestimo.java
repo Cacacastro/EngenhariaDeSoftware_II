@@ -6,7 +6,9 @@
 package controlles;
 
 import bd.dal.EmprestimoDAL;
+import bd.dal.UsuarioDAL;
 import bd.entidades.Emprestimo;
+import bd.entidades.Usuario;
 import bd.util.Conexao;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -31,7 +33,7 @@ public String buscaEmprestimo(String filtro, Conexao con) {
           res += String.format("<tr><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td>"
               + "<td onclick='ApagaAlteraEmprestimo(\"apagar\",%s)'><img src='icones/apagar.png'/></td>"
               + "<td onclick='ApagaAlteraEmprestimo(\"alterar\",%s)'><img src='icones/alterar.png'/></a></td>"
-              + "</tr>", "" + u.getCod(),"" + u.getUser_cod(), ""+u.getData(),""+u.getDuracao(), ""+ u.getValorTotal(), ""+u.getCod(),""+u.getCod());
+              + "</tr>", "" + u.getCod(),"" + u.getUser_cod().getNome(), ""+u.getData(),""+u.getDuracao(), ""+ u.getValorTotal(), ""+u.getCod(),""+u.getCod());
         }
         
         return res;
@@ -73,8 +75,10 @@ public String buscaEmprestimo(String filtro, Conexao con) {
                     int duracao = Integer.parseInt(request.getParameter("emp_duracao"));
                     double ValorTotal = Double.parseDouble(request.getParameter("emp_valortotal"));
                     int usu = Integer.parseInt(request.getParameter("usu_cod"));
+                    UsuarioDAL udal = new UsuarioDAL();
+                    Usuario usuario = udal.getUser(usu, con);
                     //VALIDAR AQUI SE EXISTE USER E BIB
-                    Emprestimo user = new Emprestimo(Ecod,duracao,usu, data, ValorTotal);
+                    Emprestimo user = new Emprestimo(Ecod,duracao,usuario, data, ValorTotal);
                     response.getWriter().print(user);
                     if (Ecod == 0) 
                     {   if (!ctr.salvar(user,con)) erro = "Erro ao gravar o empréstimo";}

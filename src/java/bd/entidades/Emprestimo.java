@@ -4,15 +4,16 @@ import java.sql.Date;
 import java.time.LocalDate;
 
 public class Emprestimo {
-    private int cod,duracao,user_cod;
+    private int cod,duracao;
     private Date data;
     private double valorTotal;
+    private Usuario user_cod;
 
     public Emprestimo() {
-        this(Date.valueOf(LocalDate.now()),3,0,0);
+        this(Date.valueOf(LocalDate.now()),3,0,new Usuario());
     }
     
-    public Emprestimo(Date data, int duracao, double valorTotal, int user_cod) {
+    public Emprestimo(Date data, int duracao, double valorTotal, Usuario user_cod) {
         cod = 0;
         this.duracao = duracao;
         this.user_cod = user_cod;
@@ -20,7 +21,7 @@ public class Emprestimo {
         this.valorTotal = valorTotal;
     }
 
-    public Emprestimo(int cod, int duracao, int user_cod, Date data, double valorTotal) {
+    public Emprestimo(int cod, int duracao, Usuario user_cod, Date data, double valorTotal) {
         this.cod = cod;
         this.duracao = duracao;
         this.user_cod = user_cod;
@@ -48,11 +49,11 @@ public class Emprestimo {
             this.duracao = 0;
     }
 
-    public int getUser_cod() {
+    public Usuario getUser_cod() {
         return user_cod;
     }
 
-    public void setUser_cod(int user_cod) {
+    public void setUser_cod(Usuario user_cod) {
         this.user_cod = user_cod;
     }
 

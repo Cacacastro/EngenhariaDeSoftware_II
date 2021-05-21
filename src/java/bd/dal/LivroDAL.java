@@ -36,7 +36,7 @@ public class LivroDAL {
         boolean flag=con.manipular("delete from livros where liv_cod="+cod);
         return flag;                      
     }
-    public Livro getUser(int cod, Conexao con)
+    public Livro getLivro(int cod, Conexao con)
     {   Livro l=new Livro();
         GeneroDAL gdal = new GeneroDAL();
         EditoraDAL edal = new EditoraDAL();

@@ -1,27 +1,32 @@
 package bd.entidades;
 
+import java.sql.Date;
+import java.time.LocalDate;
+
 public class Exemplar {
     private int exe_cod;
     private Livro liv_cod;
-    private int exe_qtd;
-    private int exe_disp;
+    private String exe_est;
+    private Date exe_dataent;
+    private boolean exe_disp;
 
-    public Exemplar()
-    {
-        this(0,new Livro(),0,0);
+    public Exemplar() {
+        this(0,new Livro(),"",Date.valueOf(LocalDate.now()),false);
     }
 
-    public Exemplar(int exe_cod, Livro liv_cod, int exe_qtd, int exe_disp) {
+    public Exemplar(int exe_cod, Livro liv_cod, String exe_est, Date exe_dataent, boolean exe_disp) {
         this.exe_cod = exe_cod;
         this.liv_cod = liv_cod;
-        this.exe_qtd = exe_qtd;
+        this.exe_est = exe_est;
+        this.exe_dataent = exe_dataent;
         this.exe_disp = exe_disp;
     }
 
-    public Exemplar(Livro liv_cod, int exe_qtd, int exe_disp) {
+    public Exemplar(Livro liv_cod, String exe_est, Date exe_dataent, boolean exe_disp) {
         exe_cod = 0;
         this.liv_cod = liv_cod;
-        this.exe_qtd = exe_qtd;
+        this.exe_est = exe_est;
+        this.exe_dataent = exe_dataent;
         this.exe_disp = exe_disp;
     }
 
@@ -41,26 +46,38 @@ public class Exemplar {
         this.liv_cod = liv_cod;
     }
 
-    public int getExe_qtd() {
-        return exe_qtd;
+    public String getExe_est() {
+        return exe_est;
     }
 
-    public void setExe_qtd(int exe_qtd) {
-        this.exe_qtd = exe_qtd;
+    public void setExe_est(String exe_est) {
+        this.exe_est = exe_est;
     }
 
-    public int getExe_disp() {
+    public Date getExe_dataent() {
+        return exe_dataent;
+    }
+
+    public void setExe_dataent(Date exe_dataent) {
+        this.exe_dataent = exe_dataent;
+    }
+
+    public boolean getExe_disp() {
         return exe_disp;
     }
 
-    public void setExe_disp(int exe_disp) {
+    public void setExe_disp(boolean exe_disp) {
         this.exe_disp = exe_disp;
     }
 
     @Override
     public String toString() {
-        return exe_cod + "," + liv_cod + "," + exe_qtd + "," + exe_disp;
+        return exe_cod + "," + liv_cod + "," + exe_est + "," + exe_dataent + "," + exe_disp;
     }
+    
+    
+
+    
     
     
 }

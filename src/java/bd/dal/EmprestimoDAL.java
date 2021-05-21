@@ -39,6 +39,7 @@ public class EmprestimoDAL {
     
     public Emprestimo getEmprestimo(int cod, Conexao con)
     {   Emprestimo u=new Emprestimo();
+        UsuarioDAL udal = new UsuarioDAL(); 
         String sql="select * from emprestimo where emp_cod="+cod;
         ResultSet rs = con.consultar(sql);
         try
@@ -48,7 +49,8 @@ public class EmprestimoDAL {
               u.setCod(cod);
               u.setDuracao(rs.getInt("emp_duracao"));
               u.setValorTotal(rs.getDouble("emp_valortotal"));
-              u.setUser_cod(rs.getInt("user_cod"));
+              int var = rs.getInt("user_cod");
+              u.setUser_cod(udal.getUser(var, con));
               u.setData(rs.getDate("emp_data"));
           }
 
@@ -58,6 +60,7 @@ public class EmprestimoDAL {
     }
     public ArrayList <Emprestimo> getEmprestimos(String filtro,boolean flag, Conexao con)
     {   ArrayList <Emprestimo> lista=new ArrayList();
+        UsuarioDAL udal = new UsuarioDAL(); 
         String sql="select * from emprestimo";
         if (!filtro.isEmpty())
             sql+=" where "+filtro;
@@ -69,7 +72,11 @@ public class EmprestimoDAL {
         try
         {
           while(rs.next())
-             lista.add(new Emprestimo(rs.getInt("emp_cod"),rs.getInt("emp_duracao"),rs.getInt("user_cod"),rs.getDate("emp_data"),rs.getDouble("emp_valorTotal")));
+          {
+              int var = rs.getInt("user_cod");
+              lista.add(new Emprestimo(rs.getInt("emp_cod"),rs.getInt("emp_duracao"),udal.getUser(var, con),rs.getDate("emp_data"),rs.getDouble("emp_valorTotal")));
+          }
+             
         }
         catch(Exception e){System.out.println(e);}
         return lista;
