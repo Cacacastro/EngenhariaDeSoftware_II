@@ -1,15 +1,17 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package controlles;
 
+import bd.dal.EmprestimoDAL;
+import bd.dal.ExemplarDAL;
 import bd.dal.UsuarioDAL;
+import bd.entidades.Emprestimo;
+import bd.entidades.Exemplar;
 import bd.entidades.Usuario;
 import bd.util.Conexao;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Date;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -19,48 +21,50 @@ import javax.servlet.http.HttpSession;
 
 /**
  *
- * @author silvi
+ * @author Carlos
  */
-@WebServlet(name = "ValidaSessao", urlPatterns = {"/ValidaSessao"})
-public class ValidaSessao extends HttpServlet {
+@WebServlet(name = "TelaEmprestimoUser", urlPatterns = {"/TelaEmprestimoUser"})
+public class TelaEmprestimoUser extends HttpServlet {
 
-
+    /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        int logou=0;
-        String login=request.getParameter("login");
-        String senha=request.getParameter("senha");
-        Usuario user = new Usuario();
+        response.setContentType("text/html;charset=UTF-8");
+        int cod,dias;
+        try {
+            cod = Integer.parseInt(request.getParameter("cod"));
+        } catch (Exception e) {
+            cod = 0;
+        }
+        try {
+            dias = Integer.parseInt(request.getParameter("emp_duracao"));
+        } catch (Exception e) {
+            dias = 3;
+        }
+        HttpSession sessao = request.getSession(true);
+        Usuario usu = (Usuario) sessao.getAttribute("usuario");
+        
         Conexao con=new Conexao();
-        if (!senha.isEmpty() && !login.isEmpty())
-        {
-            UsuarioDAL dal = new UsuarioDAL();
-            user = dal.getUserByEmail(login, con);
-            if(user!=null)
-            {
-                if(senha.equals(user.getSenha()))
-                {
-                    HttpSession sessao = request.getSession();
-                    sessao.setAttribute("usuario", user);
-                    if(user.isAtivo())
-                        if(user.getAdmin())
-                            logou =2;
-                        else
-                            logou =1;
-                }
-            }
-        }
+        
+        EmprestimoDAL edal = new EmprestimoDAL();
+        Emprestimo emp = new Emprestimo(Date.valueOf(LocalDate.now()),dias,0,usu);
+        edal.salvar(emp, con);
+        
+        ExemplarDAL exdal = new ExemplarDAL();
+        Exemplar exe = exdal.getExeLiv(cod, con);
+        exe.setExe_disp(false);
+        exdal.alterar(exe, con);
+        response.getWriter().print("Parabéns "+usu.getNome()+", seu empréstimo foi realizado com sucesso! Retirar ainda hoje o livro: "+exe.getLiv_cod().getTitulo());
+ 
         con.fecharConexao();
-        if (logou == 2)
-            response.sendRedirect("admin.html");
-        else
-        {
-            if (logou == 1)
-                response.sendRedirect("user.html");
-            else
-                response.sendRedirect("index.html");
-        }
-        return;
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

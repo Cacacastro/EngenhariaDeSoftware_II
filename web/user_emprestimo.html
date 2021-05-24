@@ -32,6 +32,7 @@ and open the template in the editor.
         <nav>
         <ul class="menuuser">
               <!--<li><a href="consultaLivros.html">Consultar Livros</a></li>-->
+              <li><a href="user_reserva.html">Reservas</a></li>
               <li><a href="user.html">Página inicial</a></li>
               <li><a href="InvalidaSessao" >Sair</a></li>
         </ul>
@@ -40,8 +41,26 @@ and open the template in the editor.
        <br><br><br>
        <div class="all-content-wrapper">
        <section class="container">
+           <div class="form-group custom-input-space has-feedback">
+             <div class="page-body clearfix">
+                 <div class="row">
+                        <div class="col-md-offset-2 col-md-8">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">Informações do Empréstimo:</div>
+                                <div class="panel-body">
+                                <form name="dados" id="fdados">
+                                        <div class="form-group form-group-lg">
+                                            <label>Duração: (Dias) *</label>  <input type="number" name="emp_duracao" id="emp_duracao" value=""  class="form-control" required=""/>
+                                        </div>
+                                </form>
+                                </div>
+                                <div class="panel-heading">* : Itens Obrigatórios (Caso de não preenchimento será considerado empréstimo de 3 dias).</div>
+                                <hr><br>
+                            </div>
+                        </div>
+                 </div>
          <div class="form-group custom-input-space has-feedback">
-                <div class="panel-heading">Lista de Livros:</div>
+                <div class="panel-heading">Lista de Livros para empréstimo:</div>
                 <div class="panel-body">
                     <!-- My Documents start -->
                     <div class="table-responsive">

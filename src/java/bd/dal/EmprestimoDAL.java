@@ -14,9 +14,13 @@ public class EmprestimoDAL {
     {
         //erro ao inserir sem o cod
         ArrayList <Emprestimo> emp = getEmprestimos("",true, con);
-        int i = emp.get(emp.size()-1).getCod()+1;
+        int i;
+        if(emp.size()==0)
+            i =1;
+        else
+            i = emp.get(emp.size()-1).getCod()+1;
         String sql="insert into emprestimo (emp_cod,emp_duracao,emp_valortotal,user_cod,emp_data) values ('"+i+"', '"
-                +u.getDuracao()+"', '"+u.getValorTotal()+"', '"+u.getUser_cod()+"', '"+u.getData()+"')";
+                +u.getDuracao()+"', '"+u.getValorTotal()+"', '"+u.getUser_cod().getCod()+"', '"+u.getData()+"')";
         
         boolean flag=con.manipular(sql);
         return flag;                              
@@ -24,7 +28,7 @@ public class EmprestimoDAL {
     
     public boolean alterar (Emprestimo u, Conexao con)
     {   
-        String sql = "update emprestimo set emp_duracao='"+u.getDuracao()+"', emp_valortotal='"+u.getValorTotal()+"', user_cod='"+u.getUser_cod()+
+        String sql = "update emprestimo set emp_duracao='"+u.getDuracao()+"', emp_valortotal='"+u.getValorTotal()+"', user_cod='"+u.getUser_cod().getCod()+
                 "', emp_data='"+u.getData()+"' where emp_cod="+u.getCod();
 
         boolean flag=con.manipular(sql);

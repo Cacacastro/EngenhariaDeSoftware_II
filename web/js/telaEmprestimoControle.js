@@ -17,7 +17,7 @@ function MostraEmprestimo(apagou=false)
 
 
 function ApagaAlteraEmprestimo(acao, cod)
-{   //event.preventDefault(); // evita refresh da tela
+{   event.preventDefault(); // evita refresh da tela
     var url = "";
     switch (acao)
     {

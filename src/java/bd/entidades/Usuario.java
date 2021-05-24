@@ -3,13 +3,13 @@ package bd.entidades;
 public class Usuario {
     private int cod;
     private String nome,fone,end,email,senha;
-    private boolean admin;
+    private boolean admin,ativo;
 
     public Usuario() {
-        this("","","","","",false);
+        this("","","","","",false,true);
     }
 
-    public Usuario(String nome, String fone, String end, String email, String senha, boolean admin) {
+    public Usuario(String nome, String fone, String end, String email, String senha, boolean admin, boolean ativo) {
         cod = 0;
         this.nome = nome;
         this.fone = fone;
@@ -17,9 +17,10 @@ public class Usuario {
         this.email = email;
         this.senha = senha;
         this.admin = admin;
+        this.ativo = ativo;
     }
 
-    public Usuario(int cod, String nome, String fone, String end, String email, String senha, boolean admin) {
+    public Usuario(int cod, String nome, String fone, String end, String email, String senha, boolean admin, boolean ativo) {
         this.cod = cod;
         this.nome = nome;
         this.fone = fone;
@@ -27,6 +28,7 @@ public class Usuario {
         this.email = email;
         this.senha = senha;
         this.admin = admin;
+        this.ativo = ativo;
     }
 
     
@@ -87,10 +89,17 @@ public class Usuario {
         this.admin = admin;
     }
 
+    public boolean isAtivo() {
+        return ativo;
+    }
+
+    public void setAtivo(boolean ativo) {
+        this.ativo = ativo;
+    }
     
     @Override
     public String toString() {
-        return cod + "," + nome + "," + fone + "," + end + "," + email + "," + senha+ "," + admin;
+        return cod + "," + nome + "," + fone + "," + end + "," + email + "," + senha+ "," + admin + "," + ativo;
     }
     
     

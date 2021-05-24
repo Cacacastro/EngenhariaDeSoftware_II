@@ -14,7 +14,7 @@ public class ExemplarDAL {
         //erro ao inserir sem o cod
         ArrayList <Exemplar> exe = getExemplares("",true, con);
         int i = exe.get(exe.size()-1).getExe_cod()+1;
-        String sql="insert into exemplar (exe_cod,liv_cod,exe_est,exe_disp,exe_dataent) values ('"+i+"', '"+e.getExe_cod()+"', '"+e.getLiv_cod()+"', '"+e.getExe_est()+"', '"+e.getExe_disp()+"', '"+e.getExe_dataent()+"')";
+        String sql="insert into exemplar (exe_cod,liv_cod,exe_est,exe_disp,exe_dataent) values ('"+i+"', '"+e.getExe_cod()+"', '"+e.getLiv_cod().getCod()+"', '"+e.getExe_est()+"', '"+e.getExe_disp()+"', '"+e.getExe_dataent()+"')";
         
         boolean flag=con.manipular(sql);
         return flag;                              
@@ -22,8 +22,8 @@ public class ExemplarDAL {
     
     public boolean alterar (Exemplar e, Conexao con)
     {   
-        String sql = "update exemplar set exe_est='"+e.getExe_est()+"','"+e.getLiv_cod()+"',exe_disp='"+e.getExe_disp()+"', exe_dataent='"+e.getExe_dataent()+"' where exe_cod="+e.getExe_cod();
-
+        String sql = "update exemplar set exe_est='"+e.getExe_est()+"',liv_cod='"+e.getLiv_cod().getCod()+"',exe_disp='"+e.getExe_disp()+"', exe_dataent='"+e.getExe_dataent()+"' where exe_cod="+e.getExe_cod();
+        System.out.println(sql);
         boolean flag=con.manipular(sql);
         return flag;                       
     }
@@ -64,18 +64,38 @@ public class ExemplarDAL {
             sql+=" order by exe_disp";
         else
             sql+=" order by exe_cod";
+        System.out.println(sql);
         ResultSet rs = con.consultar(sql);
         try
         {
           while(rs.next())
           {
               int var = rs.getInt("liv_cod");
-              lista.add(new Exemplar(rs.getInt("exe_cod"), ldal.getLivro(var, con), rs.getString("exe_est"), rs.getDate("ex_dataent"), rs.getBoolean("exe_disp")));
+              lista.add(new Exemplar(rs.getInt("exe_cod"), ldal.getLivro(var, con), rs.getString("exe_est"), rs.getDate("exe_dataent"), rs.getBoolean("exe_disp")));
           }
              
         }
         catch(Exception e){System.out.println(e);}
         return lista;
+    }
+    
+    public Exemplar getExeLiv(int cod, Conexao con)
+    {
+        String sql = "select * from exemplar where liv_cod = '"+cod+"' and exe_disp = 'true'";
+        LivroDAL ldal = new LivroDAL(); 
+        ArrayList <Exemplar> lista=new ArrayList();
+        ResultSet rs = con.consultar(sql);
+        try
+        {
+          while(rs.next())
+          {
+              int var = rs.getInt("liv_cod");
+              lista.add(new Exemplar(rs.getInt("exe_cod"), ldal.getLivro(var, con), rs.getString("exe_est"), rs.getDate("exe_dataent"), rs.getBoolean("exe_disp")));
+          }
+   
+        }
+        catch(Exception e){System.out.println(e);}
+        return lista.get(0);
     }
     
     private CharSequence parseString(int ano) {

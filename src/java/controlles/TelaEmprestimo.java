@@ -79,12 +79,11 @@ public String buscaEmprestimo(String filtro, Conexao con) {
                     Usuario usuario = udal.getUser(usu, con);
                     //VALIDAR AQUI SE EXISTE USER E BIB
                     Emprestimo user = new Emprestimo(Ecod,duracao,usuario, data, ValorTotal);
-                    response.getWriter().print(user);
                     if (Ecod == 0) 
                     {   if (!ctr.salvar(user,con)) erro = "Erro ao gravar o empréstimo";}
                     else 
                     {   if (!ctr.alterar(user,con)) erro = "Erro ao alterar o empréstimo";}
-                    
+                    response.getWriter().print(erro);
                     break;
             }
             con.fecharConexao();

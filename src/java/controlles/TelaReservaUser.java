@@ -1,15 +1,20 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package controlles;
 
-import bd.dal.UsuarioDAL;
+import bd.dal.EmprestimoDAL;
+import bd.dal.ExemplarDAL;
+import bd.dal.LivroDAL;
+import bd.dal.ReservaDAL;
+import bd.entidades.Emprestimo;
+import bd.entidades.Exemplar;
+import bd.entidades.Livro;
+import bd.entidades.Reserva;
 import bd.entidades.Usuario;
 import bd.util.Conexao;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Date;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -19,49 +24,41 @@ import javax.servlet.http.HttpSession;
 
 /**
  *
- * @author silvi
+ * @author Carlos
  */
-@WebServlet(name = "ValidaSessao", urlPatterns = {"/ValidaSessao"})
-public class ValidaSessao extends HttpServlet {
-
+@WebServlet(name = "TelaReservaUser", urlPatterns = {"/TelaReservaUser"})
+public class TelaReservaUser extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        int logou=0;
-        String login=request.getParameter("login");
-        String senha=request.getParameter("senha");
-        Usuario user = new Usuario();
+        response.setContentType("text/html;charset=UTF-8");
+        int cod;
+        Date data;
+        try {
+            cod = Integer.parseInt(request.getParameter("cod"));
+        } catch (Exception e) {
+            cod = 0;
+        }
+        try {
+            data = Date.valueOf(request.getParameter("res_data"));
+        } catch (Exception e) {
+            data = Date.valueOf(LocalDate.now());
+        }
+        HttpSession sessao = request.getSession(true);
+        Usuario usu = (Usuario) sessao.getAttribute("usuario");
+        
         Conexao con=new Conexao();
-        if (!senha.isEmpty() && !login.isEmpty())
-        {
-            UsuarioDAL dal = new UsuarioDAL();
-            user = dal.getUserByEmail(login, con);
-            if(user!=null)
-            {
-                if(senha.equals(user.getSenha()))
-                {
-                    HttpSession sessao = request.getSession();
-                    sessao.setAttribute("usuario", user);
-                    if(user.isAtivo())
-                        if(user.getAdmin())
-                            logou =2;
-                        else
-                            logou =1;
-                }
-            }
-        }
+        
+        LivroDAL ldal = new LivroDAL();
+        Livro liv = ldal.getLivro(cod, con);
+        
+        ReservaDAL rdal = new ReservaDAL();
+        Reserva res = new Reserva(true,data,0,usu, liv);
+        rdal.salvar(res, con);
+        
+        response.getWriter().print("Parabéns "+usu.getNome()+", sua reserva foi programada com sucesso! Retirar na data: "+data+", o livro: "+liv.getTitulo());
         con.fecharConexao();
-        if (logou == 2)
-            response.sendRedirect("admin.html");
-        else
-        {
-            if (logou == 1)
-                response.sendRedirect("user.html");
-            else
-                response.sendRedirect("index.html");
         }
-        return;
-    }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**

@@ -73,7 +73,7 @@ public class Livro {
 
     @Override
     public String toString() {
-        return cod + "," +numPag + "," + gen_cod + "," + edi_cod + "," + titulo;
+        return cod + "," +numPag + "," + gen_cod.getGen_cod() + "," + edi_cod.getEdi_cod() + "," + titulo;
     }
     
     

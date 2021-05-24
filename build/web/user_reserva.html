@@ -27,11 +27,12 @@ and open the template in the editor.
         <!-- Custom Css -->
         <link href="css/app_style.css" rel="stylesheet" />
     </head>
-    <body onload="MostraLivro()">
+    <body onload="MostraLivroReserva()">
        <header>
         <nav>
         <ul class="menuuser">
               <!--<li><a href="consultaLivros.html">Consultar Livros</a></li>-->
+              <li><a href="user_emprestimo.html">Empréstimos</a></li>
               <li><a href="user.html">Página inicial</a></li>
               <li><a href="InvalidaSessao" >Sair</a></li>
         </ul>
@@ -40,12 +41,30 @@ and open the template in the editor.
        <br><br><br>
        <div class="all-content-wrapper">
        <section class="container">
+            <div class="form-group custom-input-space has-feedback">
+             <div class="page-body clearfix">
+                 <div class="row">
+                        <div class="col-md-offset-2 col-md-8">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">Informações da Reserva:</div>
+                                <div class="panel-body">
+                                <form name="dados" id="fdados">
+                                        <div class="form-group form-group-lg">
+                                            <label>Data de retirada:*</label>  <input type="date" name="res_data" id="res_data" value=""  class="form-control" required=""/>
+                                        </div>
+                                </form>
+                                </div>
+                                <div class="panel-heading">* : Itens Obrigatórios.</div>
+                                <hr><br>
+                            </div>
+                        </div>
+                 </div>
          <div class="form-group custom-input-space has-feedback">
-                <div class="panel-heading">Lista de Livros:</div>
+                <div class="panel-heading">Lista de Livros para reserva:</div>
                 <div class="panel-body">
                     <!-- My Documents start -->
                     <div class="table-responsive">
-                        <form name="pesquisa" onsubmit="MostraLivro()">
+                        <form name="pesquisa" onsubmit="MostraLivroReserva()">
                             <div class="form-group-lg">
                                 <input type="text" name="filtro" id="filtro" size="120" placeholder="Informe parte do nome do livro" class="form-control  mb-2 mr-sm-2"/>
                                 <input type="submit" name="bpesq" value="Pesquisar" class="form-control  mb-2 mr-sm-2 btn btn-primary"/>
@@ -54,7 +73,7 @@ and open the template in the editor.
                         <div style="height:500px; overflow: auto">
                             <table class="table table-striped table-hover js-basic-example dataTable" >
                                 <thead>
-                                    <tr><th>Codigo</th><th>Título</th><th>Páginas</th><th>Gênero</th><th>Editora</th><th>Qtde Disponível</th></tr>
+                                    <tr><th>Codigo</th><th>Título</th><th>Páginas</th><th>Gênero</th><th>Editora</th></tr>
                                 </thead>
                                 <tbody id="preview">                
                                     <!-- será montada aqui a tabela de países cadastrados-->

@@ -50,6 +50,7 @@ function ApagaAlteraUser(acao, cod)
                 form.email.value = user[4];
                 form.senha.value = user[5];
                 form.admin.value = user[6];
+                form.ativo.value = user[7];
             }
         });
     }).catch (function(err) {console.error(err);});

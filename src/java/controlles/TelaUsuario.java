@@ -20,11 +20,11 @@ public class TelaUsuario extends HttpServlet {
         String res = "";
         ArrayList<Usuario> usuarios = new UsuarioDAL().getUsers(filtro,true,con);
         for (Usuario u : usuarios) {
-          res += String.format("<tr><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td>"
+          res += String.format("<tr><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td>"
               + "<td onclick='ApagaAlteraUser(\"apagar\",%s)'><img src='icones/apagar.png'/></td>"
               + "<td onclick='ApagaAlteraUser(\"alterar\",%s)'><img src='icones/alterar.png'/></a></td>"
               + "</tr>", "" + u.getCod(), u.getNome(),u.getFone(), u.getEnd(),
-                        "" + u.getEmail(),"" + u.getAdmin(), ""+u.getCod(), ""+u.getCod());
+                        "" + u.getEmail(),"" + u.getAdmin(),""+u.isAtivo() ,""+u.getCod(), ""+u.getCod());
         }
         
         return res;
@@ -67,8 +67,15 @@ public class TelaUsuario extends HttpServlet {
                     String end = request.getParameter("end");
                     String email = request.getParameter("email");
                     String senha = request.getParameter("senha");
-                    String admin = request.getParameter("admin");
-                    Usuario user = new Usuario(cod, nome, fone, end, email, senha, Boolean.getBoolean(admin));
+                    String admin = (request.getParameter("admin"));
+                    String ativo = (request.getParameter("ativo"));
+                    Boolean ad = false;
+                    Boolean at = false;
+                    if(admin.contains("true"))
+                        ad = true;
+                    if(ativo.contains("true"))
+                        at = true;
+                    Usuario user = new Usuario(cod, nome, fone, end, email, senha, ad,at);
                     //response.getWriter().print(user.toString());
                     if (cod == 0) 
                     {   if (!ctr.salvar(user,con)) erro = "Erro ao gravar o usuário";}

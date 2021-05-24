@@ -75,7 +75,7 @@ public class Emprestimo {
 
     @Override
     public String toString() {
-        return cod + "," + duracao + "," + user_cod + "," + data + "," + valorTotal;
+        return cod + "," + duracao + "," + user_cod.getCod() + "," + data + "," + valorTotal;
     }
     
     

@@ -1,9 +1,13 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package controlles;
 
 import bd.dal.LivroDAL;
 import bd.entidades.Livro;
 import bd.util.Conexao;
-import static com.sun.corba.se.spi.presentation.rmi.StubAdapter.request;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.ResultSet;
@@ -16,28 +20,21 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 /**
  *
  * @author Carlos
  */
-@WebServlet(name = "TelaLivroUser", urlPatterns = {"/TelaLivroUser"})
-public class TelaLivroUser extends HttpServlet {
+@WebServlet(name = "TelaLivroReserva", urlPatterns = {"/TelaLivroReserva"})
+public class TelaLivroReserva extends HttpServlet {
 public String buscaLivro(String filtro, Conexao con) throws SQLException {
         String res = "";
-        int qtd=0;
         ArrayList<Livro> Livros = new LivroDAL().getLivros(filtro,true,con);
         for (Livro l : Livros) {
-          String sql = "select COUNT(ex.exe_cod) as resultado from exemplar ex inner join livros l on ex.liv_cod = l.liv_cod and ex.liv_cod ="+ l.getCod() +"where ex.exe_disp = 'true'";
-          ResultSet rs = con.consultar(sql);
-          while(rs.next())
-              qtd = rs.getInt("resultado");
-          if(qtd>0)
-            res += String.format("<tr><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td>"
-                + "<td onclick='GeraEmprestimo(%s)'><button class=\"form-control  mb-2 mr-sm-2 btn btn-primary\" style=\"background-color: #c1e2b3; width:100px; color:black\">Empréstimo</button></td>"
+            res += String.format("<tr><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td>"
+                + "<td onclick='GeraReserva(%s)'><button class=\"form-control  mb-2 mr-sm-2 btn btn-primary\" style=\"background-color:  #FFEB3B; width:83px; color:black\">Reservar</button></td>"
                 + "</tr>", "" + l.getCod(), l.getTitulo(),""+l.getNumPag(), ""+l.getGen_cod().getGen_genero(),
-                          ""+l.getEdi_cod().getEdi_nome(),""+qtd,"" + l.getCod());
+                          ""+l.getEdi_cod().getEdi_nome(),"" + l.getCod());
         }
         
         return res;
@@ -84,7 +81,7 @@ public String buscaLivro(String filtro, Conexao con) throws SQLException {
     try {
         processRequest(request, response);
     } catch (SQLException ex) {
-        Logger.getLogger(TelaLivroUser.class.getName()).log(Level.SEVERE, null, ex);
+        Logger.getLogger(TelaLivroReserva.class.getName()).log(Level.SEVERE, null, ex);
     }
     }
 
@@ -102,7 +99,7 @@ public String buscaLivro(String filtro, Conexao con) throws SQLException {
     try {
         processRequest(request, response);
     } catch (SQLException ex) {
-        Logger.getLogger(TelaLivroUser.class.getName()).log(Level.SEVERE, null, ex);
+        Logger.getLogger(TelaLivroReserva.class.getName()).log(Level.SEVERE, null, ex);
     }
     }
 

@@ -15,8 +15,8 @@ public class UsuarioDAL {
         //erro ao inserir sem o cod
         ArrayList <Usuario> usuarios = getUsers("",true,con);
         int i = usuarios.get(usuarios.size()-1).getCod()+1;
-        String sql="insert into usuario (user_cod,user_nome,user_fone,user_end,user_email,user_senha, user_admin) values ('"+i+"', '"
-                +u.getNome()+"', '"+u.getFone()+"', '"+u.getEnd()+"', '"+u.getEmail()+"', '"+u.getSenha()+"', '"+u.getAdmin()+"')";
+        String sql="insert into usuario (user_cod,user_nome,user_fone,user_end,user_email,user_senha, user_admin, user_ativo) values ('"+i+"', '"
+                +u.getNome()+"', '"+u.getFone()+"', '"+u.getEnd()+"', '"+u.getEmail()+"', '"+u.getSenha()+"', '"+u.getAdmin()+"', '"+u.isAtivo()+"')";
         
         boolean flag=con.manipular(sql);
         return flag;                              
@@ -24,7 +24,7 @@ public class UsuarioDAL {
     public boolean alterar (Usuario u, Conexao con)
     {   
         String sql = "update usuario set user_nome='"+u.getNome()+"', user_fone='"+u.getFone()+"', user_end='"+u.getEnd()+"', user_email='"
-                +u.getEmail()+"', user_senha='"+u.getSenha()+"' where user_cod="+u.getCod();
+                +u.getEmail()+"', user_senha='"+u.getSenha()+"', user_admin='"+u.getAdmin()+"', user_ativo='"+u.isAtivo()+"' where user_cod="+u.getCod();
         
         boolean flag=con.manipular(sql);
         return flag;                       
@@ -49,6 +49,7 @@ public class UsuarioDAL {
               u.setEmail(rs.getString("user_email"));
               u.setSenha(rs.getString("user_senha"));
               u.setAdmin(rs.getBoolean("user_admin"));
+              u.setAtivo(rs.getBoolean("user_ativo"));
           }
 
         }
@@ -70,6 +71,7 @@ public class UsuarioDAL {
               u.setEmail(rs.getString("user_email"));
               u.setSenha(rs.getString("user_senha"));
               u.setAdmin(rs.getBoolean("user_admin"));
+              u.setAtivo(rs.getBoolean("user_ativo"));
           }
 
         }
@@ -89,7 +91,7 @@ public class UsuarioDAL {
         try
         {
           while(rs.next())
-             lista.add(new Usuario(rs.getInt("user_cod"),rs.getString("user_nome"),rs.getString("user_fone"),rs.getString("user_end"),rs.getString("user_email"),rs.getString("user_senha"),rs.getBoolean("user_admin")));
+             lista.add(new Usuario(rs.getInt("user_cod"),rs.getString("user_nome"),rs.getString("user_fone"),rs.getString("user_end"),rs.getString("user_email"),rs.getString("user_senha"),rs.getBoolean("user_admin"),rs.getBoolean("user_ativo")));
         }
         catch(Exception e){System.out.println(e);}
         return lista;
