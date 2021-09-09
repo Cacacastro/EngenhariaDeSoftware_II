@@ -5,8 +5,8 @@
  */
 package controlles;
 
-import bd.dal.EmprestimoDAL;
-import bd.dal.UsuarioDAL;
+import bd.dao.EmprestimoDAO;
+import bd.dao.UsuarioDAO;
 import bd.entidades.Emprestimo;
 import bd.entidades.Usuario;
 import bd.util.Conexao;
@@ -28,7 +28,7 @@ import javax.servlet.http.HttpServletResponse;
 public class TelaEmprestimo extends HttpServlet {
 public String buscaEmprestimo(String filtro, Conexao con) {
         String res = "";
-        ArrayList<Emprestimo> emprestimos = new EmprestimoDAL().getEmprestimos(filtro,true,con);
+        ArrayList<Emprestimo> emprestimos = new EmprestimoDAO().getEmprestimos(filtro,true,con);
         for (Emprestimo u : emprestimos) {
           res += String.format("<tr><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td>"
               + "<td onclick='ApagaAlteraEmprestimo(\"apagar\",%s)'><img src='icones/apagar.png'/></td>"
@@ -51,7 +51,7 @@ public String buscaEmprestimo(String filtro, Conexao con) {
             } catch (Exception e) {
                 Ecod = 0;
             }
-            EmprestimoDAL ctr = new EmprestimoDAL();
+            EmprestimoDAO ctr = new EmprestimoDAO();
             Conexao con=new Conexao();
             switch (acao.toLowerCase()) 
             {
@@ -75,7 +75,7 @@ public String buscaEmprestimo(String filtro, Conexao con) {
                     int duracao = Integer.parseInt(request.getParameter("emp_duracao"));
                     double ValorTotal = Double.parseDouble(request.getParameter("emp_valortotal"));
                     int usu = Integer.parseInt(request.getParameter("usu_cod"));
-                    UsuarioDAL udal = new UsuarioDAL();
+                    UsuarioDAO udal = new UsuarioDAO();
                     Usuario usuario = udal.getUser(usu, con);
                     //VALIDAR AQUI SE EXISTE USER E BIB
                     Emprestimo user = new Emprestimo(Ecod,duracao,usuario, data, ValorTotal);

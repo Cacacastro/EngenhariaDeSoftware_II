@@ -1,9 +1,9 @@
 package controlles;
 
-import bd.dal.EmprestimoDAL;
-import bd.dal.ExemplarDAL;
-import bd.dal.LivroDAL;
-import bd.dal.ReservaDAL;
+import bd.dao.EmprestimoDAO;
+import bd.dao.ExemplarDAO;
+import bd.dao.LivroDAO;
+import bd.dao.ReservaDAO;
 import bd.entidades.Emprestimo;
 import bd.entidades.Exemplar;
 import bd.entidades.Livro;
@@ -49,10 +49,10 @@ public class TelaReservaUser extends HttpServlet {
         
         Conexao con=new Conexao();
         
-        LivroDAL ldal = new LivroDAL();
+        LivroDAO ldal = new LivroDAO();
         Livro liv = ldal.getLivro(cod, con);
         
-        ReservaDAL rdal = new ReservaDAL();
+        ReservaDAO rdal = new ReservaDAO();
         Reserva res = new Reserva(true,data,0,usu, liv);
         rdal.salvar(res, con);
         

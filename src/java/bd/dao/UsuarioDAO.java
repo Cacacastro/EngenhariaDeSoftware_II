@@ -1,13 +1,13 @@
-package bd.dal;
+package bd.dao;
 
 import bd.entidades.Usuario;
 import bd.util.Conexao;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 
-public class UsuarioDAL {
+public class UsuarioDAO {
 
-    public UsuarioDAL() {
+    public UsuarioDAO() {
     }
     
     public boolean salvar (Usuario u, Conexao con)

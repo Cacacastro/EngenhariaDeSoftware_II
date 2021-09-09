@@ -1,13 +1,13 @@
-package bd.dal;
+package bd.dao;
 
 import bd.entidades.Reserva;
 import bd.util.Conexao;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 
-public class ReservaDAL {
+public class ReservaDAO {
 
-    public ReservaDAL() {
+    public ReservaDAO() {
     }
     
     public boolean salvar (Reserva r, Conexao con)
@@ -43,8 +43,8 @@ public class ReservaDAL {
     
     public Reserva getReserva(int cod, Conexao con)
     {   Reserva r=new Reserva();
-        LivroDAL ldal = new LivroDAL(); 
-        UsuarioDAL udal = new UsuarioDAL();
+        LivroDAO ldao = new LivroDAO(); 
+        UsuarioDAO udao = new UsuarioDAO();
         String sql="select * from reserva where res_cod="+cod;
         ResultSet rs = con.consultar(sql);
         try
@@ -56,8 +56,8 @@ public class ReservaDAL {
               r.setRes_valorTot(rs.getDouble("res_valortot"));
               int var = rs.getInt("user_cod");
               int var1 = rs.getInt("liv_cod");
-              r.setUser_cod(udal.getUser(var, con));
-              r.setLiv_cod(ldal.getLivro(var1, con));
+              r.setUser_cod(udao.getUser(var, con));
+              r.setLiv_cod(ldao.getLivro(var1, con));
               r.setRes_in_emp(rs.getBoolean("res_is_emp"));
           }
 
@@ -67,8 +67,8 @@ public class ReservaDAL {
     }
     public ArrayList <Reserva> getReservas(String filtro,boolean flag, Conexao con)
     {   ArrayList <Reserva> lista=new ArrayList();
-        UsuarioDAL udal = new UsuarioDAL(); 
-        LivroDAL ldal = new LivroDAL(); 
+        UsuarioDAO udao = new UsuarioDAO(); 
+        LivroDAO ldao = new LivroDAO(); 
         String sql="select * from reserva";
         if (!filtro.isEmpty())
             sql+=" where "+filtro;
@@ -83,7 +83,7 @@ public class ReservaDAL {
           {
               int var = rs.getInt("user_cod");
               int var1 = rs.getInt("liv_cod");
-              lista.add(new Reserva(rs.getBoolean("res_is_emp"),rs.getInt("res_cod"),rs.getDate("res_data"),rs.getDouble("res_valortot"),udal.getUser(var, con),ldal.getLivro(var1, con)));
+              lista.add(new Reserva(rs.getBoolean("res_is_emp"),rs.getInt("res_cod"),rs.getDate("res_data"),rs.getDouble("res_valortot"),udao.getUser(var, con),ldao.getLivro(var1, con)));
           }
              
         }

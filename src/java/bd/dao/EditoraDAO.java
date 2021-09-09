@@ -1,12 +1,12 @@
-package bd.dal;
+package bd.dao;
 
 import bd.entidades.Editora;
 import bd.util.Conexao;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 
-public class EditoraDAL {
-    public EditoraDAL() {
+public class EditoraDAO {
+    public EditoraDAO() {
     }
     
     public boolean salvar (Editora u, Conexao con)

@@ -1,6 +1,6 @@
 package controlles;
 
-import bd.dal.LivroDAL;
+import bd.dao.LivroDAO;
 import bd.entidades.Livro;
 import bd.util.Conexao;
 import static com.sun.corba.se.spi.presentation.rmi.StubAdapter.request;
@@ -27,7 +27,7 @@ public class TelaLivroUser extends HttpServlet {
 public String buscaLivro(String filtro, Conexao con) throws SQLException {
         String res = "";
         int qtd=0;
-        ArrayList<Livro> Livros = new LivroDAL().getLivros(filtro,true,con);
+        ArrayList<Livro> Livros = new LivroDAO().getLivros(filtro,true,con);
         for (Livro l : Livros) {
           String sql = "select COUNT(ex.exe_cod) as resultado from exemplar ex inner join livros l on ex.liv_cod = l.liv_cod and ex.liv_cod ="+ l.getCod() +"where ex.exe_disp = 'true'";
           ResultSet rs = con.consultar(sql);
@@ -55,7 +55,7 @@ public String buscaLivro(String filtro, Conexao con) throws SQLException {
             } catch (Exception e) {
                 cod = 0;
             }
-            LivroDAL ctr = new LivroDAL();
+            LivroDAO ctr = new LivroDAO();
             Conexao con=new Conexao();
             switch (acao.toLowerCase()) 
             {

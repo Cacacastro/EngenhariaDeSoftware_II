@@ -4,6 +4,9 @@
  * and open the template in the editor.
  */
 package bd.entidades;
+import java.util.ArrayList;
+import bd.dao.AutorDAO;
+import bd.util.Conexao;
 
 /**
  *
@@ -44,6 +47,36 @@ public class Autor
 
     public void setAut_nome(String aut_nome) {
         this.aut_nome = aut_nome;
+    }
+
+    public boolean salvar(Conexao con)
+    {
+        AutorDAO adao = new AutorDAO();
+        return adao.salvar(this, con);
+    }
+
+    public boolean alterar(Conexao con)
+    {
+        AutorDAO adao = new AutorDAO();
+        return adao.alterar(this, con);
+    }
+
+    public boolean apagar(Conexao con)
+    {
+        AutorDAO adao = new AutorDAO();
+        return adao.apagar(this.aut_cod, con);
+    }
+
+    public Autor getAutor(Conexao con)
+    {
+        AutorDAO adao = new AutorDAO();
+        return adao.getAutor(this.aut_cod, con);
+    }
+
+    public ArrayList <Autor> getAutores(String filtro,boolean flag,Conexao con)
+    {
+        AutorDAO adao = new AutorDAO();
+        return adao.getAutores(filtro,flag,con);
     }
 
     @Override

@@ -1,12 +1,12 @@
-package bd.dal;
+package bd.dao;
 
 import bd.entidades.Exemplar;
 import bd.util.Conexao;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 
-public class ExemplarDAL {
-    public ExemplarDAL() {
+public class ExemplarDAO {
+    public ExemplarDAO() {
     }
     
     public boolean salvar (Exemplar e, Conexao con)
@@ -36,7 +36,7 @@ public class ExemplarDAL {
     
     public Exemplar getExemplar(int cod, Conexao con)
     {   Exemplar e=new Exemplar();
-        LivroDAL ldal = new LivroDAL(); 
+        LivroDAO ldao = new LivroDAO(); 
         String sql="select * from exemplar where exe_cod="+cod;
         ResultSet rs = con.consultar(sql);
         try
@@ -45,7 +45,7 @@ public class ExemplarDAL {
           {
               e.setExe_cod(cod);
               int var = rs.getInt("liv_cod");
-              e.setLiv_cod(ldal.getLivro(var, con));
+              e.setLiv_cod(ldao.getLivro(var, con));
               e.setExe_est(rs.getString("exe_est"));
               e.setExe_disp(rs.getBoolean("exe_disp")); 
               e.setExe_dataent(rs.getDate("exe_dataent"));
@@ -56,7 +56,7 @@ public class ExemplarDAL {
     }
     public ArrayList <Exemplar> getExemplares(String filtro,boolean flag, Conexao con)
     {   ArrayList <Exemplar> lista=new ArrayList();
-        LivroDAL ldal = new LivroDAL(); 
+        LivroDAO ldao = new LivroDAO(); 
         String sql="select * from exemplar";
         if (!filtro.isEmpty())
             sql+=" where "+filtro;
@@ -71,7 +71,7 @@ public class ExemplarDAL {
           while(rs.next())
           {
               int var = rs.getInt("liv_cod");
-              lista.add(new Exemplar(rs.getInt("exe_cod"), ldal.getLivro(var, con), rs.getString("exe_est"), rs.getDate("exe_dataent"), rs.getBoolean("exe_disp")));
+              lista.add(new Exemplar(rs.getInt("exe_cod"), ldao.getLivro(var, con), rs.getString("exe_est"), rs.getDate("exe_dataent"), rs.getBoolean("exe_disp")));
           }
              
         }
@@ -82,7 +82,7 @@ public class ExemplarDAL {
     public Exemplar getExeLiv(int cod, Conexao con)
     {
         String sql = "select * from exemplar where liv_cod = '"+cod+"' and exe_disp = 'true'";
-        LivroDAL ldal = new LivroDAL(); 
+        LivroDAO ldao = new LivroDAO(); 
         ArrayList <Exemplar> lista=new ArrayList();
         ResultSet rs = con.consultar(sql);
         try
@@ -90,7 +90,7 @@ public class ExemplarDAL {
           while(rs.next())
           {
               int var = rs.getInt("liv_cod");
-              lista.add(new Exemplar(rs.getInt("exe_cod"), ldal.getLivro(var, con), rs.getString("exe_est"), rs.getDate("exe_dataent"), rs.getBoolean("exe_disp")));
+              lista.add(new Exemplar(rs.getInt("exe_cod"), ldao.getLivro(var, con), rs.getString("exe_est"), rs.getDate("exe_dataent"), rs.getBoolean("exe_disp")));
           }
    
         }

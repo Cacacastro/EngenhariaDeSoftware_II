@@ -5,7 +5,7 @@
  */
 package controlles;
 
-import bd.dal.UsuarioDAL;
+import bd.dao.UsuarioDAO;
 import bd.entidades.Usuario;
 import bd.util.Conexao;
 import java.io.IOException;
@@ -34,7 +34,7 @@ public class ValidaSessao extends HttpServlet {
         Conexao con=new Conexao();
         if (!senha.isEmpty() && !login.isEmpty())
         {
-            UsuarioDAL dal = new UsuarioDAL();
+            UsuarioDAO dal = new UsuarioDAO();
             user = dal.getUserByEmail(login, con);
             if(user!=null)
             {

@@ -1,13 +1,13 @@
 
-package bd.dal;
+package bd.dao;
 
 import bd.entidades.Livro;
 import bd.util.Conexao;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 
-public class LivroDAL {
-    public LivroDAL() {
+public class LivroDAO {
+    public LivroDAO() {
     }
     
     public boolean salvar (Livro l, Conexao con)
@@ -38,8 +38,8 @@ public class LivroDAL {
     }
     public Livro getLivro(int cod, Conexao con)
     {   Livro l=new Livro();
-        GeneroDAL gdal = new GeneroDAL();
-        EditoraDAL edal = new EditoraDAL();
+        GeneroDAO gdao = new GeneroDAO();
+        EditoraDAO edao = new EditoraDAO();
         String sql="select * from livros where liv_cod="+cod;
         ResultSet rs = con.consultar(sql);
         try
@@ -50,9 +50,9 @@ public class LivroDAL {
               l.setTitulo(rs.getString("liv_titulo"));
               l.setNumPag(rs.getInt("liv_numpag"));
               int var = rs.getInt("gen_cod");
-              l.setGen_cod(gdal.getGenero(var, con));
+              l.setGen_cod(gdao.getGenero(var, con));
               var = rs.getInt("edi_cod");
-              l.setEdi_cod(edal.getEditora(var, con));
+              l.setEdi_cod(edao.getEditora(var, con));
           }
 
         }
@@ -61,8 +61,8 @@ public class LivroDAL {
     }
     public ArrayList <Livro> getLivros(String filtro,boolean flag, Conexao con)
     {   ArrayList <Livro> lista=new ArrayList();
-        GeneroDAL gdal = new GeneroDAL();
-        EditoraDAL edal = new EditoraDAL();
+        GeneroDAO gdao = new GeneroDAO();
+        EditoraDAO edao = new EditoraDAO();
         String sql="select * from livros";
         if (!filtro.isEmpty())
             sql+=" where "+filtro;
@@ -77,7 +77,7 @@ public class LivroDAL {
           {
               int var1 = rs.getInt("gen_cod");
               int var2 = rs.getInt("edi_cod");
-              lista.add(new Livro(rs.getInt("liv_cod"),rs.getInt("liv_numpag"),gdal.getGenero(var1, con),edal.getEditora(var2, con),rs.getString("liv_titulo")));
+              lista.add(new Livro(rs.getInt("liv_cod"),rs.getInt("liv_numpag"),gdao.getGenero(var1, con),edao.getEditora(var2, con),rs.getString("liv_titulo")));
           }
              
         }

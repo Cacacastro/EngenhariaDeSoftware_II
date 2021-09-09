@@ -1,13 +1,13 @@
-package bd.dal;
+package bd.dao;
 
 import bd.entidades.Autor;
 import bd.util.Conexao;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 
-public class AutorDAL {
+public class AutorDAO {
 
-    public AutorDAL() {
+    public AutorDAO() {
     }
     
     public boolean salvar (Autor u, Conexao con)
@@ -67,9 +67,5 @@ public class AutorDAL {
         }
         catch(Exception e){System.out.println(e);}
         return lista;
-    }
-    
-    private CharSequence parseString(int ano) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

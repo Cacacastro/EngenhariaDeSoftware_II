@@ -1,13 +1,13 @@
-package bd.dal;
+package bd.dao;
 
 import bd.entidades.Emprestimo;
 import bd.util.Conexao;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 
-public class EmprestimoDAL {
+public class EmprestimoDAO {
 
-    public EmprestimoDAL() {
+    public EmprestimoDAO() {
     }
     
     public boolean salvar (Emprestimo u, Conexao con)
@@ -43,7 +43,7 @@ public class EmprestimoDAL {
     
     public Emprestimo getEmprestimo(int cod, Conexao con)
     {   Emprestimo u=new Emprestimo();
-        UsuarioDAL udal = new UsuarioDAL(); 
+        UsuarioDAO udao = new UsuarioDAO(); 
         String sql="select * from emprestimo where emp_cod="+cod;
         ResultSet rs = con.consultar(sql);
         try
@@ -54,7 +54,7 @@ public class EmprestimoDAL {
               u.setDuracao(rs.getInt("emp_duracao"));
               u.setValorTotal(rs.getDouble("emp_valortotal"));
               int var = rs.getInt("user_cod");
-              u.setUser_cod(udal.getUser(var, con));
+              u.setUser_cod(udao.getUser(var, con));
               u.setData(rs.getDate("emp_data"));
           }
 
@@ -64,7 +64,7 @@ public class EmprestimoDAL {
     }
     public ArrayList <Emprestimo> getEmprestimos(String filtro,boolean flag, Conexao con)
     {   ArrayList <Emprestimo> lista=new ArrayList();
-        UsuarioDAL udal = new UsuarioDAL(); 
+        UsuarioDAO udao = new UsuarioDAO(); 
         String sql="select * from emprestimo";
         if (!filtro.isEmpty())
             sql+=" where "+filtro;
@@ -78,7 +78,7 @@ public class EmprestimoDAL {
           while(rs.next())
           {
               int var = rs.getInt("user_cod");
-              lista.add(new Emprestimo(rs.getInt("emp_cod"),rs.getInt("emp_duracao"),udal.getUser(var, con),rs.getDate("emp_data"),rs.getDouble("emp_valorTotal")));
+              lista.add(new Emprestimo(rs.getInt("emp_cod"),rs.getInt("emp_duracao"),udao.getUser(var, con),rs.getDate("emp_data"),rs.getDouble("emp_valorTotal")));
           }
              
         }

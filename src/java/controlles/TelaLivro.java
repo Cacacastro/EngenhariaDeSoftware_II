@@ -5,9 +5,9 @@
  */
 package controlles;
 
-import bd.dal.EditoraDAL;
-import bd.dal.GeneroDAL;
-import bd.dal.LivroDAL;
+import bd.dao.EditoraDAO;
+import bd.dao.GeneroDAO;
+import bd.dao.LivroDAO;
 import bd.entidades.Editora;
 import bd.entidades.Genero;
 import bd.entidades.Livro;
@@ -30,7 +30,7 @@ public class TelaLivro extends HttpServlet {
 
     public String buscaLivro(String filtro, Conexao con) {
         String res = "";
-        ArrayList<Livro> Livros = new LivroDAL().getLivros(filtro,true,con);
+        ArrayList<Livro> Livros = new LivroDAO().getLivros(filtro,true,con);
         for (Livro l : Livros) {
           res += String.format("<tr><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td>"
               + "<td onclick='ApagaAlteraLivro(\"apagar\",%s)'><img src='icones/apagar.png'/></td>"
@@ -54,7 +54,7 @@ public class TelaLivro extends HttpServlet {
             } catch (Exception e) {
                 cod = 0;
             }
-            LivroDAL ctr = new LivroDAL();
+            LivroDAO ctr = new LivroDAO();
             Conexao con=new Conexao();
             switch (acao.toLowerCase()) 
             {
@@ -79,10 +79,10 @@ public class TelaLivro extends HttpServlet {
                     int gen = Integer.parseInt(request.getParameter("gen"));
                     int editora = Integer.parseInt(request.getParameter("editora"));
                     //Verifica autores, genero e editora
-                    EditoraDAL edal = new EditoraDAL();
-                    Editora ed = edal.getEditora(editora, con);
-                    GeneroDAL gdal = new GeneroDAL();
-                    Genero g = gdal.getGenero(cod, con);
+                    EditoraDAO edao = new EditoraDAO();
+                    Editora ed = edao.getEditora(editora, con);
+                    GeneroDAO gdao = new GeneroDAO();
+                    Genero g = gdao.getGenero(cod, con);
                     Livro liv = new Livro(cod, paginas,g,ed,nome);
                     if (cod == 0) 
                     {   if (!ctr.salvar(liv,con)) erro = "Erro ao gravar o livro";}

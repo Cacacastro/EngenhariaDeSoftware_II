@@ -5,7 +5,7 @@
  */
 package controlles;
 
-import bd.dal.LivroDAL;
+import bd.dao.LivroDAO;
 import bd.entidades.Livro;
 import bd.util.Conexao;
 import java.io.IOException;
@@ -29,7 +29,7 @@ import javax.servlet.http.HttpServletResponse;
 public class TelaLivroReserva extends HttpServlet {
 public String buscaLivro(String filtro, Conexao con) throws SQLException {
         String res = "";
-        ArrayList<Livro> Livros = new LivroDAL().getLivros(filtro,true,con);
+        ArrayList<Livro> Livros = new LivroDAO().getLivros(filtro,true,con);
         for (Livro l : Livros) {
             res += String.format("<tr><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td>"
                 + "<td onclick='GeraReserva(%s)'><button class=\"form-control  mb-2 mr-sm-2 btn btn-primary\" style=\"background-color:  #FFEB3B; width:83px; color:black\">Reservar</button></td>"
@@ -52,7 +52,7 @@ public String buscaLivro(String filtro, Conexao con) throws SQLException {
             } catch (Exception e) {
                 cod = 0;
             }
-            LivroDAL ctr = new LivroDAL();
+            LivroDAO ctr = new LivroDAO();
             Conexao con=new Conexao();
             switch (acao.toLowerCase()) 
             {

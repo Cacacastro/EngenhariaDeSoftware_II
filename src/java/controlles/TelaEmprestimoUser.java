@@ -1,8 +1,8 @@
 package controlles;
 
-import bd.dal.EmprestimoDAL;
-import bd.dal.ExemplarDAL;
-import bd.dal.UsuarioDAL;
+import bd.dao.EmprestimoDAO;
+import bd.dao.ExemplarDAO;
+import bd.dao.UsuarioDAO;
 import bd.entidades.Emprestimo;
 import bd.entidades.Exemplar;
 import bd.entidades.Usuario;
@@ -54,11 +54,11 @@ public class TelaEmprestimoUser extends HttpServlet {
         
         Conexao con=new Conexao();
         
-        EmprestimoDAL edal = new EmprestimoDAL();
+        EmprestimoDAO edal = new EmprestimoDAO();
         Emprestimo emp = new Emprestimo(Date.valueOf(LocalDate.now()),dias,0,usu);
         edal.salvar(emp, con);
         
-        ExemplarDAL exdal = new ExemplarDAL();
+        ExemplarDAO exdal = new ExemplarDAO();
         Exemplar exe = exdal.getExeLiv(cod, con);
         exe.setExe_disp(false);
         exdal.alterar(exe, con);

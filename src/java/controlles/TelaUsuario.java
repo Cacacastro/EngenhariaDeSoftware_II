@@ -1,6 +1,6 @@
 package controlles;
 
-import bd.dal.UsuarioDAL;
+import bd.dao.UsuarioDAO;
 import bd.entidades.Usuario;
 import bd.util.Conexao;
 import java.io.IOException;
@@ -18,7 +18,7 @@ public class TelaUsuario extends HttpServlet {
 
      public String buscaUsuario(String filtro, Conexao con) {
         String res = "";
-        ArrayList<Usuario> usuarios = new UsuarioDAL().getUsers(filtro,true,con);
+        ArrayList<Usuario> usuarios = new UsuarioDAO().getUsers(filtro,true,con);
         for (Usuario u : usuarios) {
           res += String.format("<tr><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td>"
               + "<td onclick='ApagaAlteraUser(\"apagar\",%s)'><img src='icones/apagar.png'/></td>"
@@ -42,7 +42,7 @@ public class TelaUsuario extends HttpServlet {
             } catch (Exception e) {
                 cod = 0;
             }
-            UsuarioDAL ctr = new UsuarioDAL();
+            UsuarioDAO ctr = new UsuarioDAO();
             Conexao con=new Conexao();
             switch (acao.toLowerCase()) 
             {

@@ -1,12 +1,12 @@
-package bd.dal;
+package bd.dao;
 
 import bd.entidades.Genero;
 import bd.util.Conexao;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 
-public class GeneroDAL {
-    public GeneroDAL() {
+public class GeneroDAO {
+    public GeneroDAO() {
     }
     
     public boolean salvar (Genero g, Conexao con)
